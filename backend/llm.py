@@ -19,46 +19,54 @@ def get_structured_data(resume_text: str) -> dict | None:
     model = genai.GenerativeModel('gemini-2.5-flash')
     
     prompt = f"""
-    Parse the following resume text and extract the information as a valid JSON object.
-    Only output the JSON object, nothing else. Use "null" for any missing fields.
-    Ensure "total_experience_years" is a number (float or int).
-    Ensure "passed_out_year" and "total_years" (in experience) are numbers (int or float).
-    Ensure "skills" has only technical skills
-    Ensure "city" has only city name, if no city then state, else null.
+        Parse the following resume text and extract the information as a valid JSON object.
+        
+        The resume text provided below may also contain supplementary text 
+        that has been pre-fetched from hyperlinks (e.g., a LinkedIn profile, 
+        GitHub, or personal portfolio). 
 
+        You must use ALL available text (both the original resume and the 
+        supplementary text) to find the most accurate and complete information 
+        for each field in the JSON structure.
 
-    The JSON object must follow this exact structure:
-    {{
-      "name": "string or null",
-      "email": "string or null",
-      "phone": "string or null",
-      "linkedin_url": "string or null",
-      "total_experience_years": "number or null",
-      "city": "string or null",
-      "degrees": [
+        Only output the JSON object, nothing else. Use "null" for any missing fields.
+        Ensure "total_experience_years" is a number (float or int).
+        Ensure "passed_out_year" and "total_years" (in experience) are numbers (int or float).
+        Ensure "skills" has only technical skills
+        Ensure "city" has only city name, if no city then state, else null.
+
+        The JSON object must follow this exact structure:
         {{
-          "college_name": "string",
-          "degree_name": "string or null",
-          "passed_out_year": "integer or null"
+          "name": "string or null",
+          "email": "string or null",
+          "phone": "string or null",
+          "linkedin_url": "string or null",
+          "total_experience_years": "number or null",
+          "city": "string or null",
+          "degrees": [
+            {{
+              "college_name": "string",
+              "degree_name": "string or null",
+              "passed_out_year": "integer or null"
+            }}
+          ],
+          "experience": [
+            {{
+              "company_name": "string",
+              "total_years": "number or null",
+              "role": "string",
+              "description": "string or null"
+            }}
+          ],
+          "skills": ["string", "string", ...],
+          "certifications": ["string", "string", ...]
         }}
-      ],
-      "experience": [
-        {{
-          "company_name": "string",
-          "total_years": "number or null",
-          "role": "string",
-          "description": "string or null"
-        }}
-      ],
-      "skills": ["string", "string", ...],
-      "certifications": ["string", "string", ...]
-    }}
 
-    Here is the resume text:
-    ---
-    {resume_text}
-    ---
-    """
+        Here is the combined resume text (including pre-fetched hyperlink content):
+        ---
+        {resume_text}
+        ---
+        """
     
     try:
         response = model.generate_content(prompt)

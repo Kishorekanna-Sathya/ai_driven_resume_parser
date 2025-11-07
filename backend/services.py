@@ -18,6 +18,8 @@ from pydantic import BaseModel, Field
 from db import (
     Candidate, Skill, Company, College, Degree, Experience, Certification
 )
+from docx import Document
+from PyPDF2 import PdfReader  
 
 # --- Configuration ---
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -55,42 +57,76 @@ class ResumeModel(BaseModel):
 # (Unchanged)
 async def extract_text_from_file(file):
     """Extracts raw text from an uploaded file (PDF or DOCX only)."""
-    filename = file.filename
-    file_bytes = await file.read() # Use await as this is async
+    filename = file.filename.lower()  # Convert to lowercase for comparison
     
-    mime_type, _ = mimetypes.guess_type(filename)
+    # Read file bytes once
+    file_bytes = await file.read()
+    
+    # Reset file pointer for potential re-reading
+    await file.seek(0)
     
     text = ""
     try:
-        if mime_type == 'application/pdf':
+        # Check by file extension instead of MIME type (more reliable)
+        if filename.endswith('.pdf'):
+            print(f"Processing PDF: {file.filename}")
             reader = PdfReader(BytesIO(file_bytes))
-            for page in reader.pages:
-                text += page.extract_text()
-            if not text:
-                print(f"File {filename} is image-based or has no text. Skipping.")
+            for page_num, page in enumerate(reader.pages):
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
+            
+            if not text.strip():
+                print(f"PDF {file.filename} appears to be image-based or has no extractable text.")
                 return None
                 
-        elif mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' or mime_type == 'application/msword':
-            if mime_type == 'application/msword':
-                 print(f"Warning: .doc file ({filename}) is not supported, only .docx. Skipping.")
-                 return None
-            doc = Document(BytesIO(file_bytes))
-            for para in doc.paragraphs:
-                text += para.text + "\n"
+        elif filename.endswith('.docx'):
+            print(f"Processing DOCX: {file.filename}")
+            try:
+                doc = Document(BytesIO(file_bytes))
+                for para in doc.paragraphs:
+                    if para.text.strip():  # Only add non-empty paragraphs
+                        text += para.text + "\n"
                 
+                # Also extract text from tables in the document
+                for table in doc.tables:
+                    for row in table.rows:
+                        for cell in row.cells:
+                            if cell.text.strip():
+                                text += cell.text + "\n"
+                
+                if not text.strip():
+                    print(f"DOCX {file.filename} appears to be empty.")
+                    return None
+                    
+            except Exception as e:
+                print(f"Error reading DOCX {file.filename}: {e}")
+                return None
+                
+        elif filename.endswith('.doc'):
+            print(f"Warning: .doc file ({file.filename}) is not supported, only .docx.")
+            return None
+            
         else:
-            print(f"Unsupported file type for {filename}: {mime_type}. Skipping.")
+            print(f"Unsupported file type for {file.filename}. Only PDF and DOCX are supported.")
             return None
 
     except Exception as e:
-        print(f"Error extracting text from {filename}: {e}")
+        print(f"Error extracting text from {file.filename}: {e}")
+        import traceback
+        traceback.print_exc()
         return None
-        
-    return text
+    
+    # Final validation
+    if text.strip() and len(text.strip()) > 50:
+        print(f"Successfully extracted {len(text)} characters from {file.filename}")
+        return text.strip()
+    else:
+        print(f"Extracted text from {file.filename} is too short ({len(text)} chars)")
+        return None
 
 # --- 3. LangChain LLM Parsing (Sync) ---
 
-# In backend/services.py
 
 def get_data_from_gemini(resume_text: str):
     """Sends text to Gemini via LangChain and gets structured JSON data back."""
@@ -183,9 +219,12 @@ def get_analytics_data(db: Session):
         "skill_distribution": skill_counts,
         "experience_distribution": exp_distribution
     }
+   
+def insert_json_data_into_db(json_data: dict, db: Session):
     """
     Inserts the nested JSON data into the normalized database
     as a single, atomic transaction.
+    Returns the candidate ID.
     """
     try:
         if not json_data.get('name'):
@@ -195,6 +234,7 @@ def get_analytics_data(db: Session):
         if not candidate:
             candidate = Candidate(name=json_data['name'])
             db.add(candidate)
+            db.flush()  # Flush to get the ID before commit
         
         # Update candidate fields
         candidate.email = json_data.get('email')
@@ -253,8 +293,10 @@ def get_analytics_data(db: Session):
         # --- Single Commit ---
         db.commit()
         print(f"Successfully inserted or updated data for candidate: {json_data.get('name')}")
+        
+        return candidate.id  # Return the ID
 
     except Exception as e:
-        db.rollback()
+        db.rollback() 
         print(f"Database error for {json_data.get('name')}. Transaction rolled back. Error: {e}")
         raise e

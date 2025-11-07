@@ -148,3 +148,66 @@ h1, h2, h3, h4, h5, h6 {
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
     color: #666 !important;
 }
+
+/* Add these to your existing CSS */
+
+.skill-tag {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: var(--primary-bg);
+    padding: 5px 12px;
+    margin: 5px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.experience-item, .education-item {
+    background-color: var(--secondary-bg);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.chart-container {
+    background-color: var(--secondary-bg);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    background-color: var(--secondary-bg);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Fix for Select2 in dark theme */
+.select2-container--default .select2-selection--multiple {
+    background-color: var(--secondary-bg);
+    border-color: #444;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--primary-bg);
+}
+
+/* Add/Update these chart styles */
+.chart-container {
+    background-color: var(--secondary-bg);
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    min-height: 400px;
+}
+
+.chart-container canvas {
+    background-color: transparent !important;
+}
+
+/* Make sure chart text is visible */
+.chartjs-render-monitor {
+    color: var(--primary-text) !important;
+}
