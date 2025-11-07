@@ -1,0 +1,79 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Portrait System Architecture Diagram">
+    <mxGraphModel dx="1200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="1200">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- FRONTEND -->
+        <mxCell id="2" value="Frontend Layer (JavaScript SPA)" style="swimlane;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="250" y="60" width="400" height="240" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="index.html (Shell + Sidebar)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="2">
+          <mxGeometry x="20" y="40" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="main.js (Routing & Fetch API)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="2">
+          <mxGeometry x="20" y="110" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Handlebars / D3.js / Chart.js (Visualization)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="2">
+          <mxGeometry x="20" y="180" width="360" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- BACKEND -->
+        <mxCell id="6" value="Backend Layer (FastAPI)" style="swimlane;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="250" y="340" width="400" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="app.py (API Routes)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="6">
+          <mxGeometry x="20" y="40" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="services.py (Business Logic & Data Handling)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="6">
+          <mxGeometry x="20" y="110" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="utils.py (File Extraction)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="6">
+          <mxGeometry x="20" y="180" width="360" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- AI PARSING -->
+        <mxCell id="10" value="AI Parsing Layer (LangChain + Gemini)" style="swimlane;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="250" y="640" width="400" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="Prompt Template (ChatPromptTemplate)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="10">
+          <mxGeometry x="20" y="40" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="LangChain Chain (LLM + Parser)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="10">
+          <mxGeometry x="20" y="110" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="Pydantic Models (ResumeModel, ExperienceModel)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="10">
+          <mxGeometry x="20" y="180" width="360" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- DATABASE -->
+        <mxCell id="14" value="Database Layer (SQLAlchemy + PostgreSQL)" style="swimlane;fontStyle=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="250" y="910" width="400" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="Entity Models (Candidate, Skill, Company)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="14">
+          <mxGeometry x="20" y="40" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="Associations (candidate_skills, certifications)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="14">
+          <mxGeometry x="20" y="110" width="360" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="17" value="Session Manager (get_db + Transactions)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;" vertex="1" parent="14">
+          <mxGeometry x="20" y="180" width="360" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- FLOW CONNECTIONS -->
+        <mxCell id="18" value="HTTP Request (Upload Resume)" edge="1" parent="1" source="2" target="6" style="endArrow=block;strokeColor=#000000;fontSize=11;"/>
+        <mxCell id="19" value="Invoke Services / Business Logic" edge="1" parent="1" source="6" target="10" style="endArrow=block;strokeColor=#000000;fontSize=11;"/>
+        <mxCell id="20" value="AI Returns Structured JSON" edge="1" parent="1" source="10" target="6" style="endArrow=block;strokeColor=#000000;dashed=1;fontSize=11;"/>
+        <mxCell id="21" value="Insert Parsed Data" edge="1" parent="1" source="6" target="14" style="endArrow=block;strokeColor=#000000;fontSize=11;"/>
+        <mxCell id="22" value="Retrieve Data / Analytics" edge="1" parent="1" source="14" target="6" style="endArrow=block;strokeColor=#000000;dashed=1;fontSize=11;"/>
+        <mxCell id="23" value="Render Dashboard / Candidate Table" edge="1" parent="1" source="6" target="2" style="endArrow=block;strokeColor=#000000;fontSize=11;dashed=1;"/>
+
+        <!-- LEGEND -->
+        <mxCell id="24" value="Legend: \nSolid → Request / Processing Flow\nDashed → Response / Data Return" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1080" width="220" height="70" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

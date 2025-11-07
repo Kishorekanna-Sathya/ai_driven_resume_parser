@@ -1,0 +1,53 @@
+<div class="container mt-4">
+    <h2>Candidate Database</h2>
+    <p class="text-muted">A comprehensive list of all candidates.</p>
+
+    <div id="filters" class="row g-3 align-items-center mb-4">
+        <div class="col-md-3">
+            <label for="exp-filter" class="form-label">Experience</label>
+            <select id="exp-filter" class="form-select">
+                <option value="">All</option>
+                <option value="0-2">0-2 years</option>
+                <option value="2-5">2-5 years</option>
+                <option value="5-10">5-10 years</option>
+                <option value="10+">10+ years</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="skills-filter" class="form-label">Skills</label>
+            <select id="skills-filter" class="form-select" multiple>
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="city-filter" class="form-label">City</label>
+            <select id="city-filter" class="form-select">
+                <option value="">All</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button id="reset-filters-btn" class="btn-custom">Reset</button>
+        </div>
+    </div>
+
+    <div class="table-responsive table-container">
+        <table id="candidates-table" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>LinkedIn</th>
+                    <th>Total Exp. (Yrs)</th>
+                    <th>City</th>
+                    <th>Top Skills</th>
+                    <th>Top Certifications</th>
+                </tr>
+            </thead>
+            <tbody id="candidates-table-body">
+                <!-- Data will be loaded here by DataTables -->
+            </tbody>
+        </table>
+    </div>
+</div>

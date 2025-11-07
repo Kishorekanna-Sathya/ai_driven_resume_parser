@@ -1,0 +1,21 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Activity Diagram">
+    <mxGraphModel dx="1500" dy="800" grid="1">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="2" value="Start" style="ellipse;fillColor=#d5e8d4;whiteSpace=wrap;" vertex="1" parent="1"><mxGeometry x="100" y="50" width="80" height="40" as="geometry"/></mxCell>
+        <mxCell id="3" value="Upload Resume File" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;" vertex="1" parent="1"><mxGeometry x="100" y="120" width="180" height="60" as="geometry"/></mxCell>
+        <mxCell id="4" value="Extract Text and Parse Using AI" style="rounded=1;whiteSpace=wrap;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="100" y="210" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="5" value="Store Structured Data in Database" style="rounded=1;whiteSpace=wrap;fillColor=#e1d5e7;" vertex="1" parent="1"><mxGeometry x="100" y="300" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="6" value="View Candidate Analytics" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="100" y="390" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="7" value="End" style="ellipse;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="150" y="480" width="80" height="40" as="geometry"/></mxCell>
+        <!-- Connections -->
+        <mxCell id="8" edge="1" source="2" target="3" parent="1"/>
+        <mxCell id="9" edge="1" source="3" target="4" parent="1"/>
+        <mxCell id="10" edge="1" source="4" target="5" parent="1"/>
+        <mxCell id="11" edge="1" source="5" target="6" parent="1"/>
+        <mxCell id="12" edge="1" source="6" target="7" parent="1"/>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

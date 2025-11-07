@@ -1,0 +1,20 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Sequence Diagram">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" pageWidth="1200" pageHeight="800">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <!-- Lifelines -->
+        <mxCell id="u" value="User" style="shape=umlLifeline;participant=1" vertex="1" parent="1"><mxGeometry x="100" y="50" width="80" height="400" as="geometry"/></mxCell>
+        <mxCell id="f" value="Frontend" style="shape=umlLifeline;participant=1" vertex="1" parent="1"><mxGeometry x="300" y="50" width="80" height="400" as="geometry"/></mxCell>
+        <mxCell id="b" value="Backend" style="shape=umlLifeline;participant=1" vertex="1" parent="1"><mxGeometry x="500" y="50" width="80" height="400" as="geometry"/></mxCell>
+        <mxCell id="d" value="Database" style="shape=umlLifeline;participant=1" vertex="1" parent="1"><mxGeometry x="700" y="50" width="80" height="400" as="geometry"/></mxCell>
+        <!-- Messages -->
+        <mxCell id="2" value="Upload Resume" edge="1" source="u" target="f" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="3" value="Send Request" edge="1" source="f" target="b" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="4" value="AI Parsing and Data Extraction" edge="1" source="b" target="d" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="5" value="Return Parsed Data" edge="1" source="b" target="f" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="6" value="Display Candidate Info" edge="1" source="f" target="u" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

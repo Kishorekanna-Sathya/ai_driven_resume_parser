@@ -1,0 +1,11 @@
+# VSCode editor settings
+.vscode/
+
+# Python cache
+__pycache__/
+
+# Python virtual environment
+resume_venv/
+
+# Environment variables (secrets)
+.env
